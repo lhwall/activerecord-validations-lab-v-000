@@ -3,10 +3,14 @@ class Post < ActiveRecord::Base
   validates :content, length: {minimum: 250}
   validates :summary, length: {maximum: 250}
   validates :category, inclusion: { in: %w(Fiction Non-Fiction)}
-  #validate :clickbait
+  validate :clickbait
 
   def clickbait
-    self.title.include?("Won't Believe") || self.title.include?("Secret") || self.title.include?("Guess") || self.title.include?("Top #{/\d+/}")
+  if !!self.title
+     if !self.title.include?("Won't Believe") && !self.title.include?("Secret") && !self.title.include?("Guess") && !self.title.include?("Top #{/\d+/}")
+     errors.add(:title, "must be clickbait")
+   end
+   end 
   end
 
 end
